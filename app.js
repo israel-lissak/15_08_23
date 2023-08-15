@@ -10,19 +10,43 @@ app.get('/', (req, res) => {
 });
 
 app.get('/:id', (req, res) => {
-    res.send(users[req.params.id-1]);
+    let user = users.filter(e => e.id == req.params.id);
+    console.log(req.params.id);
+    console.log(user);
+    res.send(user);
 });
 
 app.post('/', (req, res) => {
-    const obj = {id: req.body.id, email: req.body.email, password: req.body.password};
-    console.log(":)");
-    users.push(obj);
-    res.send(users)
+    let user = users.filter(e => e.id == req.body.id);
+    console.log(user, user.length);
+    if (user.length > 0) {
+        res.send('id exist')
+    } else {
+        const obj = {id: req.body.id, email: req.body.email, password: req.body.password};
+        users.push(obj);
+        res.send('user added succesfuly');
+    }
+    
 })
 
 app.put('/:id', (req, res) => {
-    
+    let user = users.filter(e => e.id == req.params.id);
+    const obj = {id: req.body.id, email: req.body.email, password: req.body.password};
+    users[user] = obj;
+    res.send(users)
 });
+
+app.delete('/:id', (req, res) => {
+    let user = users.filter(e => e.id == req.params.id);
+    console.log(user, user.length);
+    if (user.length === 0) {
+        res.send('id not exist')
+    } else {
+       users.splice(users.filter(e => e.id == req.params.id), 1);
+        console.log(users);
+        res.send('user delete succesfuly');
+    }
+})
 
 
 app.listen(port, () => {
